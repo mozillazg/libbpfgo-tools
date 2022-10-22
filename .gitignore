@@ -13,7 +13,5 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-/bpf/tracepoint/output/
-/bpf/tracepoint/vmlinux.h
-/bpf/tracepoint/main.bpf.o
-/bpf/tracepoint/event.txt
+*.bpf.o
+/tools/bindsnoop/bindsnoop
