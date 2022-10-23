@@ -73,6 +73,7 @@ var opts = Options{
 	verbose:    false,
 	cgroup:     "",
 }
+var startTime time.Time
 
 func init() {
 	flag.StringVar(&opts.bpfObjPath, "objpath", opts.bpfObjPath, "Path to the bpf object file")
@@ -191,7 +192,8 @@ func formatEvent(event Event) {
 		fmt.Printf("%-8s ", time.Now().Format("15:04:05"))
 	}
 	if opts.timestamp {
-		// TODO: time_since_start
+		timeDiff := time.Since(startTime).Seconds()
+		fmt.Printf("%-8.3f", timeDiff)
 	}
 	if opts.printUid {
 		fmt.Printf("%-6d", event.Uid)
@@ -221,6 +223,7 @@ func main() {
 	}
 	initFilters(bpfModule)
 
+	startTime = time.Now()
 	progIter := bpfModule.Iterator()
 	for {
 		prog := progIter.NextProgram()
