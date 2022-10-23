@@ -16,3 +16,4 @@
 *.bpf.o
 /tools/bindsnoop/bindsnoop
 /tools/execsnoop/execsnoop
+/tools/exitsnoop/exitsnoop
