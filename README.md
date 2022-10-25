@@ -37,7 +37,7 @@ libbpfgo ports of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/
 * [ ] runqlat
 * [ ] runqlen
 * [ ] runqslower
-* [ ] sigsnoop
+* [x] [sigsnoop](./tools/sigsnoop)
 * [ ] slabratetop
 * [ ] softirqs
 * [ ] solisten
