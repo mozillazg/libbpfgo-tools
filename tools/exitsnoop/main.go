@@ -16,6 +16,42 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
+var signalNameMap = map[syscall.Signal]string{
+	syscall.SIGABRT: "SIGABRT",
+	syscall.SIGALRM: "SIGALRM",
+	syscall.SIGCHLD: "SIGCHLD",
+	syscall.SIGCONT: "SIGCONT",
+	// syscall.SIGEMT:  "SIGEMT",
+	syscall.SIGFPE: "SIGFPE",
+	syscall.SIGHUP: "SIGHUP",
+	syscall.SIGILL: "SIGILL",
+	syscall.SIGINT: "SIGINT",
+	syscall.SIGIO:  "SIGIO",
+	// syscall.SIGIOT:  "SIGIOT",
+	syscall.SIGKILL: "SIGKILL",
+	syscall.SIGPIPE: "SIGPIPE",
+	// syscall.SIGPOLL:   "SIGPOLL",
+	syscall.SIGPROF:   "SIGPROF",
+	syscall.SIGPWR:    "SIGPWR",
+	syscall.SIGQUIT:   "SIGQUIT",
+	syscall.SIGSEGV:   "SIGSEGV",
+	syscall.SIGSTKFLT: "SIGSTKFLT",
+	syscall.SIGSTOP:   "SIGSTOP",
+	syscall.SIGSYS:    "SIGSYS",
+	syscall.SIGTRAP:   "SIGTRAP",
+	syscall.SIGTSTP:   "SIGTSTP",
+	syscall.SIGTTIN:   "SIGTTIN",
+	syscall.SIGTTOU:   "SIGTTOU",
+	// syscall.SIGUNUSED: "SIGUNUSED",
+	syscall.SIGURG:    "SIGURG",
+	syscall.SIGUSR1:   "SIGUSR1",
+	syscall.SIGUSR2:   "SIGUSR2",
+	syscall.SIGVTALRM: "SIGVTALRM",
+	syscall.SIGWINCH:  "SIGWINCH",
+	syscall.SIGXCPU:   "SIGXCPU",
+	syscall.SIGXFSZ:   "SIGXFSZ",
+}
+
 type Event struct {
 	StartTime uint64
 	ExitTime  uint64
@@ -57,6 +93,14 @@ func init() {
 	flag.BoolVarP(&opts.threaded, "threaded", "T", opts.threaded, "Trace by thread")
 	flag.StringVarP(&opts.cgroup, "cgroup", "c", opts.cgroup, "Trace process in cgroup path")
 	// flag.BoolVarP(&opts.verbose, "verbose", "v", opts.verbose, "Verbose debug output")
+}
+
+func getSignalName(signal uint32) string {
+	v := signalNameMap[syscall.Signal(signal)]
+	if v == "" {
+		v = "N/A"
+	}
+	return v
 }
 
 func initGlobalVariable(bpfModule *bpf.Module, name string, value interface{}) {
@@ -127,7 +171,7 @@ func formatEvent(event Event) {
 		sig := event.Sig & 0x7f
 		coredump := event.Sig & 0x80
 		if sig > 0 {
-			fmt.Printf("signal %d (%s)", sig, syscall.Signal(sig))
+			fmt.Printf("signal %d (%s)", sig, getSignalName(sig))
 		}
 		if coredump > 0 {
 			fmt.Printf(", core dumped")
