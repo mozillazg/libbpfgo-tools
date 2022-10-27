@@ -31,7 +31,7 @@ libbpfgo ports of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/
 * [ ] mountsnoop
 * [ ] numamove
 * [ ] offcputime
-* [ ] oomkill
+* [x] [oomkill](./tools/oomkill)
 * [ ] opensnoop
 * [ ] readahead
 * [ ] runqlat
