@@ -41,7 +41,7 @@ libbpfgo ports of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/
 * [ ] slabratetop
 * [ ] softirqs
 * [ ] solisten
-* [ ] statsnoop
+* [x] [statsnoop](statsnoop)
 * [ ] syscount
 * [ ] tcpconnect
 * [x] [tcpconnlat](tcpconnlat)
