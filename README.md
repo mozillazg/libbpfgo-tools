@@ -27,7 +27,7 @@ libbpfgo ports of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/
 * [ ] klockstat
 * [ ] ksnoop
 * [ ] llcstat
-* [ ] mdflush
+* [x] [mdflush](./tools/mdflush)
 * [ ] mountsnoop
 * [ ] numamove
 * [ ] offcputime
