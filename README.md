@@ -33,7 +33,7 @@ libbpfgo ports of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/
 * [ ] offcputime
 * [x] [oomkill](./tools/oomkill)
 * [ ] opensnoop
-* [ ] readahead
+* [x] [readahead](./tools/readahead)
 * [ ] runqlat
 * [ ] runqlen
 * [ ] runqslower
