@@ -47,6 +47,6 @@ libbpfgo ports of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/
 * [x] [tcpconnlat](tcpconnlat)
 * [x] [tcplife](./tools/tcplife)
 * [ ] tcprtt
-* [ ] tcpsynbl
+* [x] [tcpsynbl](./tools/tcpsynbl)
 * [ ] tcptracer
 * [ ] vfsstat
