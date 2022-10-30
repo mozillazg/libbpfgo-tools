@@ -4,7 +4,7 @@ libbpfgo ports of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/
 
 ## tools
 
-* [ ] bashreadline
+* [x] [bashreadline](./tools/bashreadline)
 * [x] [bindsnoop](./tools/bindsnoop)
 * [ ] biolatency
 * [ ] biopattern
