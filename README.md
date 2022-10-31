@@ -12,7 +12,7 @@ libbpfgo ports of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/
 * [ ] biostacks
 * [ ] bitesize
 * [ ] cachestat
-* [ ] cpudist
+* [x] [cpudist](./tools/cpudist)
 * [ ] cpufreq
 * [x] [drsnoop](./tools/drsnoop)
 * [x] [execsnoop](./tools/execsnoop)
