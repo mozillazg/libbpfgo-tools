@@ -155,11 +155,11 @@ func LoadPartitions() (*Partitions, error) {
 	pts := &Partitions{}
 	s := bufio.NewScanner(bytes.NewReader(fdata))
 	for s.Scan() {
-		line := strings.TrimSpace(s.Text())
+		line := s.Text()
 		if line == "" || line[0] != ' ' {
 			continue
 		}
-		parts := strings.Fields(line)
+		parts := strings.Fields(strings.TrimSpace(line))
 		if len(parts) != 4 {
 			continue
 		}
