@@ -10,7 +10,7 @@
 * [x] [biopattern](./tools/biopattern)
 * [x] [biosnoop](./tools/biosnoop)
 * [ ] biostacks
-* [ ] bitesize
+* [x] [bitesize](./tools/bitesize)
 * [ ] cachestat
 * [x] [cpudist](./tools/cpudist)
 * [ ] cpufreq
