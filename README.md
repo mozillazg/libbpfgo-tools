@@ -1,6 +1,6 @@
 # libbpfgo-tools
 
-libbpfgo ports of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/libbpf-tools).
+[libbpfgo](https://github.com/aquasecurity/libbpfgo) ports of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/libbpf-tools).
 
 ## tools
 
@@ -8,7 +8,7 @@ libbpfgo ports of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/
 * [x] [bindsnoop](./tools/bindsnoop)
 * [x] [biolatency](./tools/biolatency)
 * [x] [biopattern](./tools/biopattern)
-* [ ] biosnoop
+* [x] [biosnoop](./tools/biosnoop)
 * [ ] biostacks
 * [ ] bitesize
 * [ ] cachestat
