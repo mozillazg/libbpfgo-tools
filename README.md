@@ -1,6 +1,6 @@
 # libbpfgo-tools
 
-[libbpfgo](https://github.com/aquasecurity/libbpfgo) ports of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/libbpf-tools).
+[libbpfgo](https://github.com/aquasecurity/libbpfgo) port of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/libbpf-tools).
 
 ## tools
 
@@ -18,7 +18,7 @@
 * [x] [execsnoop](./tools/execsnoop)
 * [x] [exitsnoop](./tools/exitsnoop)
 * [x] [filelife](./tools/filelife)
-* [ ] filetop
+* [x] [filetop](./tools/filetop)
 * [ ] fsdist
 * [ ] fsslower
 * [ ] funclatency
@@ -41,10 +41,10 @@
 * [ ] slabratetop
 * [ ] softirqs
 * [ ] solisten
-* [x] [statsnoop](statsnoop)
+* [x] [statsnoop](./tools/statsnoop)
 * [ ] syscount
 * [ ] tcpconnect
-* [x] [tcpconnlat](tcpconnlat)
+* [x] [tcpconnlat](./tools/tcpconnlat)
 * [x] [tcplife](./tools/tcplife)
 * [ ] tcprtt
 * [x] [tcpsynbl](./tools/tcpsynbl)
