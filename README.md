@@ -48,5 +48,5 @@
 * [x] [tcplife](./tools/tcplife)
 * [ ] tcprtt
 * [x] [tcpsynbl](./tools/tcpsynbl)
-* [ ] tcptracer
+* [x] [tcptracer](./tools/tcptracer)
 * [ ] vfsstat
