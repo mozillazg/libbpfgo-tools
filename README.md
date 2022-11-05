@@ -43,7 +43,7 @@
 * [ ] solisten
 * [x] [statsnoop](./tools/statsnoop)
 * [ ] syscount
-* [ ] tcpconnect
+* [x] [tcpconnect](./tools/tcpconnect)
 * [x] [tcpconnlat](./tools/tcpconnlat)
 * [x] [tcplife](./tools/tcplife)
 * [x] [tcprtt](./tools/tcprtt)
