@@ -32,7 +32,7 @@
 * [ ] numamove
 * [ ] offcputime
 * [x] [oomkill](./tools/oomkill)
-* [ ] opensnoop
+* [x] [opensnoop](./tools/opensnoop)
 * [x] [readahead](./tools/readahead)
 * [ ] runqlat
 * [ ] runqlen
