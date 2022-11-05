@@ -91,7 +91,7 @@ func initGlobalVars(bpfModule *bpf.Module) {
 		columnWidth = 26
 	}
 	if opts.pid > 0 {
-		if err := bpfModule.InitGlobalVariable("target_pid", &opts.pid); err != nil {
+		if err := bpfModule.InitGlobalVariable("target_pid", opts.pid); err != nil {
 			log.Fatalln(err)
 		}
 	}
