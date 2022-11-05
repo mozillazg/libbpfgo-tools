@@ -22,7 +22,8 @@ jobs:
           sudo apt-get install --yes build-essential pkgconf libelf-dev llvm-12 clang-12
           for tool in "clang" "llc" "llvm-strip"; do
             path=$(which $tool-12)
-            sudo ln -s $path ${path%-*}
+            sudo cp $(which $tool){.bak}
+            sudo ln -sf $path ${path%-*}
           done
       - name: build tools
         run: |
