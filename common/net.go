@@ -2,9 +2,7 @@ package common
 
 import (
 	"encoding/binary"
-	"net"
 	"net/netip"
-	"unsafe"
 )
 
 const (
@@ -14,16 +12,10 @@ const (
 
 type Uint128 [16]byte
 
-func Uint32ToIpV4(n uint32) net.IP {
-	ip := make(net.IP, 4)
-	binary.LittleEndian.PutUint32(ip, n)
-	return ip
-}
-
 func Htons(i uint16) uint16 {
 	b := make([]byte, 2)
-	binary.BigEndian.PutUint16(b, i)
-	return *(*uint16)(unsafe.Pointer(&b[0]))
+	binary.LittleEndian.PutUint16(b, i)
+	return binary.BigEndian.Uint16(b)
 }
 
 func Ntohs(i uint16) uint16 {
@@ -43,4 +35,24 @@ func AddrFrom16(family uint16, addr [16]byte) netip.Addr {
 	default:
 		return netip.AddrFrom16(addr)
 	}
+}
+
+func InetAton(ip string) (uint32, error) {
+	addr, err := netip.ParseAddr(ip)
+	if err != nil {
+		return 0, err
+	}
+	return addrToN(addr), nil
+}
+
+func InetNtoa(ip uint32) string {
+	data := [4]byte{}
+	binary.LittleEndian.PutUint32(data[:], ip)
+	addr := netip.AddrFrom4(data)
+	return addr.String()
+}
+
+func addrToN(addr netip.Addr) uint32 {
+	data := addr.As4()
+	return binary.LittleEndian.Uint32(data[:])
 }

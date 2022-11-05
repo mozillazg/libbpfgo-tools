@@ -46,7 +46,7 @@
 * [ ] tcpconnect
 * [x] [tcpconnlat](./tools/tcpconnlat)
 * [x] [tcplife](./tools/tcplife)
-* [ ] tcprtt
+* [x] [tcprtt](./tools/tcprtt)
 * [x] [tcpsynbl](./tools/tcpsynbl)
 * [x] [tcptracer](./tools/tcptracer)
 * [ ] vfsstat
