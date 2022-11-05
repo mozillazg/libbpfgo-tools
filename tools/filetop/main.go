@@ -17,7 +17,6 @@ import (
 	"unsafe"
 
 	bpf "github.com/aquasecurity/libbpfgo"
-	"github.com/mozillazg/libbpfgo-tools/common"
 	flag "github.com/spf13/pflag"
 )
 
@@ -130,7 +129,8 @@ func parseArgs() {
 		}
 	}
 }
-func initGlobalVars(bpfModule *bpf.Module, partitions common.Partitions) {
+
+func initGlobalVars(bpfModule *bpf.Module) {
 	if opts.pid > 0 {
 		if err := bpfModule.InitGlobalVariable("target_pid", opts.pid); err != nil {
 			log.Fatalln(err)
@@ -255,18 +255,13 @@ func printStat(entries *bpf.BPFMap) {
 func main() {
 	parseArgs()
 
-	partitions, err := common.LoadPartitions()
-	if err != nil {
-		log.Fatalln(err)
-	}
-
 	bpfModule, err := bpf.NewModuleFromFile(opts.bpfObjPath)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	defer bpfModule.Close()
 
-	initGlobalVars(bpfModule, *partitions)
+	initGlobalVars(bpfModule)
 	loadBPFObj(bpfModule)
 	applyFilters(bpfModule)
 	attachPrograms(bpfModule)
