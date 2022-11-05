@@ -1,0 +1,31 @@
+name: Build tools
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-tools:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: |
+          set -e
+          apt-get update
+          apt-get install --yes build-essential pkgconf libelf-dev llvm-12 clang-12
+      - name: build tools
+        run: |
+          set -e
+          cd tools
+          for i in $(ls ./); do
+            echo -e "\033[33m=== start build $i  ===\033[0;39m"
+            ( cd $i && make )
+            echo -e "\033[32m=== finish build $i ===\033[0;39m"
+          done
