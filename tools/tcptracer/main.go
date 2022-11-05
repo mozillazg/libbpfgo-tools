@@ -88,7 +88,7 @@ func parseArgs() {
 	flag.Parse()
 }
 
-func initGlobalVars(bpfModule *bpf.Module, partitions common.Partitions) {
+func initGlobalVars(bpfModule *bpf.Module) {
 	if opts.pid > 0 {
 		if err := bpfModule.InitGlobalVariable("filter_pid", opts.pid); err != nil {
 			log.Fatalln(err)
@@ -165,18 +165,13 @@ func printEvent(data []byte) {
 func main() {
 	parseArgs()
 
-	partitions, err := common.LoadPartitions()
-	if err != nil {
-		log.Fatalln(err)
-	}
-
 	bpfModule, err := bpf.NewModuleFromFile(opts.bpfObjPath)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	defer bpfModule.Close()
 
-	initGlobalVars(bpfModule, *partitions)
+	initGlobalVars(bpfModule)
 	loadBPFObj(bpfModule)
 	applyFilters(bpfModule)
 	attachPrograms(bpfModule)
