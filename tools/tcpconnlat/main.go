@@ -68,12 +68,12 @@ func init() {
 
 func initGlobalVars(bpfModule *bpf.Module) {
 	if opts.pid > 0 {
-		if err := bpfModule.InitGlobalVariable("targ_tgid", &opts.pid); err != nil {
+		if err := bpfModule.InitGlobalVariable("targ_tgid", opts.pid); err != nil {
 			log.Fatalln(err)
 		}
 	}
 	if opts.minUs > 0 {
-		if err := bpfModule.InitGlobalVariable("targ_min_us", &opts.minUs); err != nil {
+		if err := bpfModule.InitGlobalVariable("targ_min_us", opts.minUs); err != nil {
 			log.Fatalln(err)
 		}
 	}
