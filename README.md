@@ -1,6 +1,9 @@
 # libbpfgo-tools
 
+[![Build tools](https://github.com/mozillazg/libbpfgo-tools/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/mozillazg/libbpfgo-tools/actions/workflows/build.yml)
+
 [libbpfgo](https://github.com/aquasecurity/libbpfgo) port of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/libbpf-tools).
+
 
 ## tools
 
