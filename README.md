@@ -5,7 +5,7 @@
 [libbpfgo](https://github.com/aquasecurity/libbpfgo) port of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/libbpf-tools).
 
 
-## tools (25/46)
+## tools (26/46)
 
 * [x] [bashreadline](./tools/bashreadline)
 * [x] [bindsnoop](./tools/bindsnoop)
@@ -43,7 +43,7 @@
 * [x] [sigsnoop](./tools/sigsnoop)
 * [ ] slabratetop
 * [ ] softirqs
-* [ ] solisten
+* [x] [solisten](./tools/solisten)
 * [x] [statsnoop](./tools/statsnoop)
 * [ ] syscount
 * [x] [tcpconnect](./tools/tcpconnect)

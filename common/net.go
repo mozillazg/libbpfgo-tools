@@ -8,6 +8,9 @@ import (
 const (
 	AF_INET  = 2
 	AF_INET6 = 10
+
+	SOCK_STREAM = 1
+	SOCK_DGRAM  = 2
 )
 
 type Uint128 [16]byte
