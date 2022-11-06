@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -187,4 +188,76 @@ const minOrMask = (1 << minOrBits) - 1
 
 func mkdev(ma, mi int) int {
 	return ((ma) << minOrBits) | (mi)
+}
+
+type Ksym struct {
+	Name string
+	Addr uint64
+}
+
+type Ksyms struct {
+	Syms []Ksym
+	// Strs string
+}
+
+func LoadKsyms() (*Ksyms, error) {
+	fdata, err := os.ReadFile("/proc/kallsyms")
+	if err != nil {
+		return nil, err
+	}
+
+	ksyms := &Ksyms{}
+	s := bufio.NewScanner(bytes.NewReader(fdata))
+	for s.Scan() {
+		line := strings.TrimSpace(s.Text())
+		fields := strings.Fields(line)
+		if len(fields) < 3 {
+			continue
+		}
+
+		addr, err := strconv.ParseUint(fields[0], 16, 64)
+		if err != nil {
+			return nil, err
+		}
+		name := fields[2]
+		ksyms.Syms = append(ksyms.Syms, Ksym{
+			Name: name,
+			Addr: addr,
+		})
+	}
+
+	syms := ksyms.Syms
+	sort.Slice(syms, func(i, j int) bool {
+		if syms[i].Addr == syms[j].Addr {
+			return syms[i].Name >= syms[j].Name
+		}
+		return syms[i].Addr >= syms[j].Addr
+	})
+
+	ksyms.Syms = syms
+	return ksyms, nil
+}
+
+func (k *Ksyms) MapAddr(addr uint64) *Ksym {
+	syms := k.Syms
+	i := sort.Search(len(syms), func(i int) bool {
+		return syms[i].Addr <= addr
+	})
+
+	// fmt.Printf("%d ? %d\n", addr, i)
+	if i < len(syms) {
+		v := syms[i]
+		return &v
+	}
+	return nil
+}
+
+func (k *Ksyms) GetSymbol(name string) *Ksym {
+	for _, v := range k.Syms {
+		v := v
+		if v.Name == name {
+			return &v
+		}
+	}
+	return nil
 }

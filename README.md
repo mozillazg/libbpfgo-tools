@@ -5,14 +5,14 @@
 [libbpfgo](https://github.com/aquasecurity/libbpfgo) port of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/libbpf-tools).
 
 
-## tools
+## tools (25/46)
 
 * [x] [bashreadline](./tools/bashreadline)
 * [x] [bindsnoop](./tools/bindsnoop)
 * [x] [biolatency](./tools/biolatency)
 * [x] [biopattern](./tools/biopattern)
 * [x] [biosnoop](./tools/biosnoop)
-* [ ] biostacks
+* [x] [biostacks](./tools/biostacks)
 * [x] [bitesize](./tools/bitesize)
 * [ ] cachestat
 * [x] [cpudist](./tools/cpudist)
