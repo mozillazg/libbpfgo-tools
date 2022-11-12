@@ -31,7 +31,7 @@
 * [ ] ksnoop
 * [ ] llcstat
 * [x] [mdflush](./tools/mdflush)
-* [ ] mountsnoop
+* [x] [mountsnoop](./tools/mountsnoop)
 * [ ] numamove
 * [ ] offcputime
 * [x] [oomkill](./tools/oomkill)
