@@ -5,7 +5,7 @@
 [libbpfgo](https://github.com/aquasecurity/libbpfgo) port of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/libbpf-tools).
 
 
-## tools (28/46)
+## tools (29/46)
 
 * [x] [bashreadline](./tools/bashreadline)
 * [x] [bindsnoop](./tools/bindsnoop)
@@ -22,7 +22,7 @@
 * [x] [exitsnoop](./tools/exitsnoop)
 * [x] [filelife](./tools/filelife)
 * [x] [filetop](./tools/filetop)
-* [ ] fsdist
+* [x] [fsdist](./tools/fsdist)
 * [ ] fsslower
 * [ ] funclatency
 * [ ] gethostlatency
