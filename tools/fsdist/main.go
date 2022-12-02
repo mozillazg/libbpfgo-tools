@@ -10,6 +10,7 @@ import (
 	"os/signal"
 	"path"
 	"strconv"
+	"strings"
 	"syscall"
 	"time"
 
@@ -266,7 +267,11 @@ func fentrySetAttach(bpfModule *bpf.Module, funcName, target string) {
 		log.Fatalln(err)
 	}
 	prog.SetProgramType(bpf.BPFProgTypeTracing)
-	prog.SetAttachType(bpf.BPFAttachTypeTraceFentry)
+	if strings.HasSuffix(funcName, "_fentry") {
+		prog.SetAttachType(bpf.BPFAttachTypeTraceFentry)
+	} else {
+		prog.SetAttachType(bpf.BPFAttachTypeTraceFexit)
+	}
 	if err := prog.SetAttachTarget(0, target); err != nil {
 		log.Fatalln(err)
 	}
