@@ -17,7 +17,6 @@ import (
 
 const (
 	TASK_COMM_LEN = 16
-	MAX_ENTRIES   = 8192
 )
 
 const (
@@ -40,17 +39,6 @@ type Event struct {
 	Dport uint16
 	Sport uint16
 	Type  uint8
-}
-
-func (e Event) TaskString() string {
-	return string(bytes.TrimRight(e.Task[:], "\x00"))
-}
-
-func (e Event) SaddrString() string {
-	return common.AddrFrom16(uint16(e.Af), e.Saddr).String()
-}
-func (e Event) DaddrString() string {
-	return common.AddrFrom16(uint16(e.Af), e.Daddr).String()
 }
 
 type Options struct {
@@ -158,7 +146,9 @@ func printEvent(data []byte) {
 	}
 
 	fmt.Printf("%c %-6d %-12.12s %-2d %-16s %-16s %-4d %-4d\n",
-		_type, e.Pid, e.TaskString(), af, e.SaddrString(), e.DaddrString(),
+		_type, e.Pid, common.GoString(e.Task[:]), af,
+		common.AddrFrom16(uint16(e.Af), e.Saddr).String(),
+		common.AddrFrom16(uint16(e.Af), e.Daddr).String(),
 		common.Ntohs(e.Sport), common.Ntohs(e.Dport))
 }
 

@@ -25,15 +25,6 @@ type Counter struct {
 	Random     uint32
 }
 
-type Hist struct {
-	Slots [27]uint32
-}
-
-type HistKey struct {
-	CmdFlags uint32
-	Dev      uint32
-}
-
 type Options struct {
 	bpfObjPath string
 	verbose    bool
@@ -42,8 +33,6 @@ type Options struct {
 	interval   uint64
 	times      uint64
 }
-
-const maxCpuNr = 128
 
 var opts = Options{
 	bpfObjPath: "biopattern.bpf.o",

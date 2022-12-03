@@ -24,10 +24,6 @@ type Hist struct {
 	Comm  [16]byte
 }
 
-func (h Hist) CommString() string {
-	return string(bytes.TrimRight(h.Comm[:], "\x00"))
-}
-
 type Options struct {
 	bpfObjPath   string
 	verbose      bool
@@ -213,10 +209,10 @@ func printLog2Hists(hists *bpf.BPFMap) {
 		}
 		nextKey := binary.LittleEndian.Uint32(key)
 		if opts.pids {
-			fmt.Printf("\npid = %d %s\n", nextKey, hist.CommString())
+			fmt.Printf("\npid = %d %s\n", nextKey, common.GoString(hist.Comm[:]))
 		}
 		if opts.tids {
-			fmt.Printf("\ntid = %d %s\n", nextKey, hist.CommString())
+			fmt.Printf("\ntid = %d %s\n", nextKey, common.GoString(hist.Comm[:]))
 		}
 		common.PrintLog2Hist(vals, units)
 	}

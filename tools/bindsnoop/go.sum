@@ -1,4 +1,4 @@
-github.com/aquasecurity/libbpfgo v0.4.3-libbpf-1.0.1 h1:xDHt+EJM/EJt9BXS2YheZNuynT/QNdraL/LHSSpdOxg=
-github.com/aquasecurity/libbpfgo v0.4.3-libbpf-1.0.1/go.mod h1:v+Nk+v6BtHLfdT4kVdsp+fYt4AeUa3cIG2P0y+nBuuY=
+github.com/aquasecurity/libbpfgo v0.4.4-libbpf-1.0.1 h1:cjdRq/YhQ5ZVU0jm6H3VXVcHgMzAAslrlexPq8acgSk=
+github.com/aquasecurity/libbpfgo v0.4.4-libbpf-1.0.1/go.mod h1:v+Nk+v6BtHLfdT4kVdsp+fYt4AeUa3cIG2P0y+nBuuY=
 github.com/spf13/pflag v1.0.5 h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=
 github.com/spf13/pflag v1.0.5/go.mod h1:McXfInJRrz4CZXVZOBLb0bTZqETkiAhM9Iw0y3An2Bg=

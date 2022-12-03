@@ -16,8 +16,16 @@ import (
 
 	bpf "github.com/aquasecurity/libbpfgo"
 	"github.com/aquasecurity/libbpfgo/helpers"
+	"github.com/mozillazg/libbpfgo-tools/common"
 	flag "github.com/spf13/pflag"
 )
+
+const MAX_LINE_SIZE = 80
+
+type StrT struct {
+	Pid uint32
+	Str [MAX_LINE_SIZE]byte
+}
 
 type Options struct {
 	bpfObjPath string
@@ -68,18 +76,24 @@ func findReadlineSo() string {
 }
 
 func printEvent(data []byte) {
-	var pid uint32
-	if err := binary.Read(bytes.NewReader(data), binary.LittleEndian, &pid); err != nil {
+	var e StrT
+	if err := binary.Read(bytes.NewReader(data), binary.LittleEndian, &e); err != nil {
 		log.Fatalf("read data failed: %s\n%v", err, data)
 	}
-	str := data[4:]
-	str = str[:bytes.IndexByte(str, 0)]
-
 	ts := time.Now().Format("15:04:05")
-	fmt.Printf("%-9s %-7d %s\n", ts, pid, str)
+	fmt.Printf("%-9s %-7d %s\n", ts, e.Pid, common.GoPath(e.Str[:]))
 }
 
 func initGlobalVars(bpfModule *bpf.Module) {
+}
+
+func loadBPFObj(bpfModule *bpf.Module) {
+	if err := bpfModule.BPFLoadObject(); err != nil {
+		log.Fatalln(err)
+	}
+}
+
+func applyFilters(bpfModule *bpf.Module) {
 }
 
 func attachPrograms(bpfModule *bpf.Module) {
@@ -111,9 +125,8 @@ func main() {
 	defer bpfModule.Close()
 
 	initGlobalVars(bpfModule)
-	if err := bpfModule.BPFLoadObject(); err != nil {
-		log.Fatalln(err)
-	}
+	loadBPFObj(bpfModule)
+	applyFilters(bpfModule)
 	attachPrograms(bpfModule)
 
 	eventsChannel := make(chan []byte)

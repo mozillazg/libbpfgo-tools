@@ -11,6 +11,9 @@ const (
 
 	SOCK_STREAM = 1
 	SOCK_DGRAM  = 2
+
+	IPPROTO_TCP = 6
+	IPPROTO_UDP = 17
 )
 
 type Uint128 [16]byte

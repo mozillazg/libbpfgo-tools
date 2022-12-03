@@ -41,8 +41,6 @@ type Options struct {
 	times        uint64
 }
 
-const maxCpuNr = 128
-
 var opts = Options{
 	bpfObjPath:   "biolatency.bpf.o",
 	verbose:      false,

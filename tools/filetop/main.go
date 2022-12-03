@@ -11,12 +11,12 @@ import (
 	"os/signal"
 	"sort"
 	"strconv"
-	"strings"
 	"syscall"
 	"time"
 	"unsafe"
 
 	bpf "github.com/aquasecurity/libbpfgo"
+	"github.com/mozillazg/libbpfgo-tools/common"
 	flag "github.com/spf13/pflag"
 )
 
@@ -34,31 +34,16 @@ const (
 	WBYTES
 )
 
-type FileStatBase struct {
+type FileStat struct {
 	Reads      uint64
 	ReadBytes  uint64
 	Writes     uint64
 	WriteBytes uint64
 	Pid        uint32
 	Tid        uint32
-}
-
-type FileExtra struct {
-	Common [TASK_COMM_LEN]byte
-	Type   byte
-}
-
-type FileStat struct {
-	FileStatBase
-	FileExtra
-	filename [PATH_MAX]byte
-}
-
-func (s FileStat) Common() string {
-	return string(bytes.TrimRight(s.FileExtra.Common[:], "\x00"))
-}
-func (s FileStat) Filename() string {
-	return strings.Split(string(bytes.TrimRight(s.filename[:], "\x00")), "\x00")[0]
+	Filename   [PATH_MAX]byte
+	Common     [TASK_COMM_LEN]byte
+	Type       byte
 }
 
 type Options struct {
@@ -167,21 +152,8 @@ func attachPrograms(bpfModule *bpf.Module) {
 }
 
 func parseStat(data []byte) FileStat {
-	base := FileStatBase{}
-	if err := binary.Read(bytes.NewReader(data), binary.LittleEndian, &base); err != nil {
-		log.Fatalln(err)
-	}
-	extra := FileExtra{}
-	length := len(data)
-	if err := binary.Read(bytes.NewReader(data[length-8-TASK_COMM_LEN:length]), binary.LittleEndian, &extra); err != nil {
-		log.Fatalln(err)
-	}
-
-	stat := FileStat{
-		FileStatBase: base,
-		FileExtra:    extra,
-	}
-	if err := binary.Read(bytes.NewReader(data[40:length-8-TASK_COMM_LEN]), binary.LittleEndian, &stat.filename); err != nil {
+	var stat FileStat
+	if err := binary.Read(bytes.NewReader(data), binary.LittleEndian, &stat); err != nil {
 		log.Fatalln(err)
 	}
 	return stat
@@ -237,9 +209,9 @@ func printStat(entries *bpf.BPFMap) {
 	}
 	for i := 0; i < rows; i++ {
 		fmt.Printf("%-7d %-16s %-6d %-6d %-7d %-7d %c %s\n",
-			values[i].Tid, values[i].Common(), values[i].Reads, values[i].Writes,
+			values[i].Tid, common.GoString(values[i].Common[:]), values[i].Reads, values[i].Writes,
 			values[i].ReadBytes/1024, values[i].WriteBytes/1024,
-			values[i].Type, values[i].Filename())
+			values[i].Type, common.GoPath(values[i].Filename[:]))
 	}
 	fmt.Printf("\n")
 

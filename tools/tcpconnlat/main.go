@@ -30,17 +30,6 @@ type Event struct {
 	Dport   uint16
 }
 
-func (e Event) CommString() string {
-	return string(bytes.TrimRight(e.Comm[:], "\x00"))
-}
-
-func (e Event) SaddrString() string {
-	return common.AddrFrom16(uint16(e.Af), e.Saddr).String()
-}
-func (e Event) DaddrString() string {
-	return common.AddrFrom16(uint16(e.Af), e.Daddr).String()
-}
-
 type Options struct {
 	bpfObjPath string
 	verbose    bool
@@ -111,11 +100,13 @@ func printEvent(data []byte) {
 	}
 
 	if opts.lport {
-		fmt.Printf("%-6d %-12.12s %-2d %-16s %-6d %-16s %-5d %.2f\n", e.Tgid, e.CommString(),
-			af, e.SaddrString(), e.Lport, e.DaddrString(), common.Ntohs(e.Dport), float64(e.DeltaUs)/1000.0)
+		fmt.Printf("%-6d %-12.12s %-2d %-16s %-6d %-16s %-5d %.2f\n", e.Tgid, common.GoString(e.Comm[:]),
+			af, common.AddrFrom16(uint16(e.Af), e.Saddr).String(), e.Lport,
+			common.AddrFrom16(uint16(e.Af), e.Daddr).String(), common.Ntohs(e.Dport), float64(e.DeltaUs)/1000.0)
 	} else {
-		fmt.Printf("%-6d %-12.12s %-2d %-16s %-16s %-5d %.2f\n", e.Tgid, e.CommString(),
-			af, e.SaddrString(), e.DaddrString(), common.Ntohs(e.Dport), float64(e.DeltaUs)/1000.0)
+		fmt.Printf("%-6d %-12.12s %-2d %-16s %-16s %-5d %.2f\n", e.Tgid, common.GoString(e.Comm[:]),
+			af, common.AddrFrom16(uint16(e.Af), e.Saddr).String(),
+			common.AddrFrom16(uint16(e.Af), e.Daddr).String(), common.Ntohs(e.Dport), float64(e.DeltaUs)/1000.0)
 	}
 }
 

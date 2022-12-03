@@ -12,6 +12,7 @@ import (
 	"time"
 
 	bpf "github.com/aquasecurity/libbpfgo"
+	"github.com/mozillazg/libbpfgo-tools/common"
 	flag "github.com/spf13/pflag"
 )
 
@@ -21,10 +22,6 @@ type Event struct {
 	NrReclaimed uint64
 	NrFreePages uint64
 	Pid         uint32
-}
-
-func (e Event) TaskString() string {
-	return string(bytes.TrimRight(e.Task[:], "\x00"))
 }
 
 type Options struct {
@@ -76,7 +73,7 @@ func applyArgs(bpfModule *bpf.Module) {
 func formatEvent(event Event) {
 	ts := time.Now().Format("15:04:05")
 	fmt.Printf("%-8s %-16s %-6d %8.3f %5d",
-		ts, event.TaskString(), event.Pid, float64(event.DeltaNs)/float64(1000000.0),
+		ts, common.GoString(event.Task[:]), event.Pid, float64(event.DeltaNs)/float64(1000000.0),
 		event.NrReclaimed)
 	if opts.extended {
 		// TODO:

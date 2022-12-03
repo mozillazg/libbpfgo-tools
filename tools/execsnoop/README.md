@@ -19,4 +19,9 @@ run              2510046 12771    0 ./run
 calico-node      2510046 12771    0 /usr/bin/calico-node -monitor-addresses
 run              2510052 12773    0 ./run
 calico-node      2510052 12773    0 /usr/bin/calico-node -status-reporter
+
+$ sudo ./execsnoop -n ls
+PCOMM            PID    PPID   RET ARGS
+ls               177423 173377   0 /usr/bin/ls --color=auto
+ls               177424 173377   0 /usr/bin/ls --color=auto
 ```

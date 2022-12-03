@@ -13,6 +13,7 @@ import (
 	"unsafe"
 
 	bpf "github.com/aquasecurity/libbpfgo"
+	"github.com/mozillazg/libbpfgo-tools/common"
 	flag "github.com/spf13/pflag"
 )
 
@@ -61,10 +62,6 @@ type Event struct {
 	Sig       uint32
 	ExitCode  int32
 	Comm      [16]byte
-}
-
-func (e Event) CommString() string {
-	return string(bytes.TrimRight(e.Comm[:], "\x00"))
 }
 
 type Options struct {
@@ -160,7 +157,7 @@ func formatEvent(event Event) {
 	}
 	age := float64(event.ExitTime-event.StartTime) / 1e9
 	fmt.Printf("%-16s %-7d %-7d %-7d %-7.2f ",
-		event.CommString(), event.Pid, event.Ppid, event.Tid, age)
+		common.GoString(event.Comm[:]), event.Pid, event.Ppid, event.Tid, age)
 	if event.Sig == 0 {
 		if event.ExitCode <= 0 {
 			fmt.Printf("0\n")

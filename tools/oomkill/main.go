@@ -13,6 +13,7 @@ import (
 	"time"
 
 	bpf "github.com/aquasecurity/libbpfgo"
+	"github.com/mozillazg/libbpfgo-tools/common"
 	flag "github.com/spf13/pflag"
 )
 
@@ -22,14 +23,6 @@ type Event struct {
 	Pages uint64
 	Fcomm [16]byte
 	Tcomm [16]byte
-}
-
-func (e Event) FcommString() string {
-	return string(bytes.TrimRight(e.Fcomm[:], "\x00"))
-}
-
-func (e Event) TcommString() string {
-	return string(bytes.TrimRight(e.Tcomm[:], "\x00"))
 }
 
 type Options struct {
@@ -53,10 +46,10 @@ func formatEvent(event Event) {
 	if err == nil {
 		loadAvg := strings.TrimSpace(string(rawLoadAvg))
 		fmt.Printf("%s Triggered by PID %d (\"%s\"), OOM kill of PID %d (\"%s\"), %d pages, loadavg: %s\n",
-			ts, event.Fpid, event.Fcomm, event.Tpid, event.Tcomm, event.Pages, loadAvg)
+			ts, event.Fpid, common.GoString(event.Fcomm[:]), event.Tpid, common.GoString(event.Tcomm[:]), event.Pages, loadAvg)
 	} else {
 		fmt.Printf("%s Triggered by PID %d (\"%s\"), OOM kill of PID %d (\"%s\"), %d pages\n",
-			ts, event.Fpid, event.Fcomm, event.Tpid, event.Tcomm, event.Pages)
+			ts, event.Fpid, common.GoString(event.Fcomm[:]), event.Tpid, common.GoString(event.Tcomm[:]), event.Pages)
 	}
 }
 

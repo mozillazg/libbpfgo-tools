@@ -11,8 +11,11 @@ import (
 	"syscall"
 
 	bpf "github.com/aquasecurity/libbpfgo"
+	"github.com/mozillazg/libbpfgo-tools/common"
 	flag "github.com/spf13/pflag"
 )
+
+const PERF_BUFFER_PAGES = 16
 
 type Event struct {
 	TsNs     uint64
@@ -20,14 +23,6 @@ type Event struct {
 	Ret      int32
 	Comm     [16]byte
 	Pathname [255]byte
-}
-
-func (e Event) CommString() string {
-	return string(bytes.TrimRight(e.Comm[:], "\x00"))
-}
-
-func (e Event) PathnameString() string {
-	return string(bytes.TrimRight(e.Pathname[:], "\x00"))
 }
 
 type Options struct {
@@ -77,7 +72,7 @@ func printEvent(data []byte) {
 		ts := float64(e.TsNs-startTimestamp) / 1000000000
 		fmt.Printf("%-14.9f ", ts)
 	}
-	fmt.Printf("%-7d %-20s %-4d %-4d %-s\n", e.Pid, e.CommString(), fd, err, e.PathnameString())
+	fmt.Printf("%-7d %-20s %-4d %-4d %-s\n", e.Pid, common.GoString(e.Comm[:]), fd, err, common.GoPath(e.Pathname[:]))
 }
 
 func initGlobalVars(bpfModule *bpf.Module) {
@@ -123,7 +118,7 @@ func main() {
 
 	eventsChannel := make(chan []byte)
 	lostChannel := make(chan uint64)
-	pb, err := bpfModule.InitPerfBuf("events", eventsChannel, lostChannel, 1)
+	pb, err := bpfModule.InitPerfBuf("events", eventsChannel, lostChannel, PERF_BUFFER_PAGES)
 	if err != nil {
 		log.Fatalln(err)
 	}

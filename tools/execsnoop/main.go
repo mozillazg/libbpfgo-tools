@@ -14,6 +14,7 @@ import (
 	"unsafe"
 
 	bpf "github.com/aquasecurity/libbpfgo"
+	"github.com/mozillazg/libbpfgo-tools/common"
 	flag "github.com/spf13/pflag"
 )
 
@@ -34,14 +35,6 @@ type BaseEvent struct {
 type Event struct {
 	BaseEvent
 	Args []byte
-}
-
-func (e Event) CommString() string {
-	return string(bytes.TrimRight(e.Comm[:], "\x00"))
-}
-
-func (e Event) ArgsString() string {
-	return string(bytes.TrimRight(e.Args[:], "\x00"))
 }
 
 type Options struct {
@@ -182,10 +175,10 @@ func formatArgs(event Event) string {
 }
 
 func formatEvent(event Event) {
-	if opts.name != "" && !strings.Contains(event.CommString(), opts.name) {
+	if opts.name != "" && !strings.Contains(common.GoString(event.Comm[:]), opts.name) {
 		return
 	}
-	if opts.line != "" && !strings.Contains(event.ArgsString(), opts.line) {
+	if opts.line != "" && !strings.Contains(common.GoString(event.Args[:]), opts.line) {
 		return
 	}
 	if opts.time {
@@ -198,7 +191,7 @@ func formatEvent(event Event) {
 	if opts.printUid {
 		fmt.Printf("%-6d", event.Uid)
 	}
-	fmt.Printf("%-16s %-6d %-6d %3d ", event.CommString(), event.Pid, event.Ppid, event.Retval)
+	fmt.Printf("%-16s %-6d %-6d %3d ", common.GoString(event.Comm[:]), event.Pid, event.Ppid, event.Retval)
 	fmt.Printf("%s\n", formatArgs(event))
 }
 

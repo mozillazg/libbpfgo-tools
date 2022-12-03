@@ -30,11 +30,6 @@ type Event struct {
 	Dev      uint32
 }
 
-func (e Event) CommString() string {
-	flag.Usage()
-	return string(bytes.TrimRight(e.Comm[:], "\x00"))
-}
-
 type Options struct {
 	bpfObjPath string
 	verbose    bool
@@ -204,7 +199,7 @@ func printEvent(data []byte, partitions common.Partitions) {
 	}
 	fmt.Printf("%-11.6f %-14.14s %-7d %-7s %-4s %-10d %-7d ",
 		float64(e.Ts-startTs)/1000000000.0,
-		e.CommString(), e.Pid, name, rwbs, e.Sector, e.Len)
+		common.GoString(e.Comm[:]), e.Pid, name, rwbs, e.Sector, e.Len)
 	if opts.queued {
 		fmt.Printf("%7.3f ", float64(e.Qdelta)/1000000.0)
 	}

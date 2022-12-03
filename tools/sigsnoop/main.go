@@ -12,6 +12,7 @@ import (
 	"time"
 
 	bpf "github.com/aquasecurity/libbpfgo"
+	"github.com/mozillazg/libbpfgo-tools/common"
 	flag "github.com/spf13/pflag"
 )
 
@@ -57,10 +58,6 @@ type Event struct {
 	Sig  uint32
 	Ret  int32
 	Comm [16]byte
-}
-
-func (e Event) CommString() string {
-	return string(bytes.TrimRight(e.Comm[:], "\x00"))
 }
 
 type Options struct {
@@ -124,11 +121,11 @@ func formatEvent(event Event) {
 	if opts.name {
 		// sig := event.Sig & 0x7f
 		fmt.Printf("%-8s %-7d %-16s %-9s %-7d %-6d\n",
-			time.Now().Format("15:04:05"), event.Pid, event.CommString(),
+			time.Now().Format("15:04:05"), event.Pid, common.GoString(event.Comm[:]),
 			getSignalName(event.Sig), event.Tpid, event.Ret)
 	} else {
 		fmt.Printf("%-8s %-7d %-16s %-9d %-7d %-6d\n",
-			time.Now().Format("15:04:05"), event.Pid, event.CommString(),
+			time.Now().Format("15:04:05"), event.Pid, common.GoString(event.Comm[:]),
 			event.Sig, event.Tpid, event.Ret)
 	}
 }

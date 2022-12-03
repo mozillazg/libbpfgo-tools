@@ -42,11 +42,6 @@ type Hist struct {
 	Slots [MAX_SLOTS]uint32
 }
 
-type HistKey struct {
-	CmdFlags uint32
-	Dev      uint32
-}
-
 type FSConfig struct {
 	fs      string
 	opFuncs [MAX_OP]string

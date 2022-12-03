@@ -13,12 +13,14 @@ import (
 	"time"
 
 	bpf "github.com/aquasecurity/libbpfgo"
+	"github.com/mozillazg/libbpfgo-tools/common"
 	flag "github.com/spf13/pflag"
 )
 
 const (
-	TASK_COMM_LEN = 16
-	NAME_MAX      = 255
+	TASK_COMM_LEN     = 16
+	NAME_MAX          = 255
+	PERF_BUFFER_PAGES = 64
 )
 
 type Event struct {
@@ -29,14 +31,6 @@ type Event struct {
 	Flags int32
 	Comm  [TASK_COMM_LEN]byte
 	Fname [NAME_MAX]byte
-}
-
-func (e Event) CommString() string {
-	return string(bytes.TrimRight(e.Comm[:], "\x00"))
-}
-
-func (e Event) FnameString() string {
-	return string(bytes.Split(bytes.TrimRight(e.Fname[:], "\x00"), []byte("\x00"))[0])
 }
 
 type Options struct {
@@ -134,7 +128,7 @@ func printEvent(data []byte) {
 	if err != nil {
 		log.Fatalf("read data failed: %s\n%v", err, data)
 	}
-	if opts.name != "" && !strings.Contains(e.CommString(), opts.name) {
+	if opts.name != "" && !strings.Contains(common.GoString(e.Comm[:]), opts.name) {
 		return
 	}
 
@@ -152,11 +146,11 @@ func printEvent(data []byte) {
 	if opts.printUid {
 		fmt.Printf("%-6d ", e.Uid)
 	}
-	fmt.Printf("%-6d %-16s %3d %3d ", e.Pid, e.CommString(), fd, errR)
+	fmt.Printf("%-6d %-16s %3d %3d ", e.Pid, common.GoString(e.Comm[:]), fd, errR)
 	if opts.extendedFields {
 		fmt.Printf("%08o ", e.Flags)
 	}
-	fmt.Printf("%s\n", e.FnameString())
+	fmt.Printf("%s\n", common.GoPath(e.Fname[:]))
 
 }
 
@@ -176,7 +170,7 @@ func main() {
 
 	eventsChannel := make(chan []byte)
 	lostChannel := make(chan uint64)
-	pb, err := bpfModule.InitPerfBuf("events", eventsChannel, lostChannel, 1)
+	pb, err := bpfModule.InitPerfBuf("events", eventsChannel, lostChannel, PERF_BUFFER_PAGES)
 	if err != nil {
 		log.Fatalln(err)
 	}

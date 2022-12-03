@@ -20,7 +20,6 @@ import (
 
 const (
 	TASK_COMM_LEN = 16
-	DISK_NAME_LEN = 32
 	MAX_SLOTS     = 20
 )
 
@@ -30,10 +29,6 @@ type Hist struct {
 
 type HistKey struct {
 	Comm [TASK_COMM_LEN]byte
-}
-
-func (k HistKey) CommString() string {
-	return string(bytes.TrimRight(k.Comm[:], "\x00"))
 }
 
 type Options struct {
@@ -155,7 +150,7 @@ func printLog2Hists(hists *bpf.BPFMap) {
 		for _, v := range hist.Slots {
 			vals = append(vals, int(v))
 		}
-		fmt.Printf("\nProcess Name = %s\n", nextKey.CommString())
+		fmt.Printf("\nProcess Name = %s\n", common.GoString(nextKey.Comm[:]))
 		common.PrintLog2Hist(vals, "Kbytes")
 	}
 

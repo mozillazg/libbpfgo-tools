@@ -49,31 +49,6 @@ type Event struct {
 	Dport uint16
 }
 
-func (e Event) TaskString() string {
-	return string(bytes.TrimRight(e.Task[:], "\x00"))
-}
-
-func (e Event) SaddrString() string {
-	return common.AddrFrom16(uint16(e.Af), e.Saddr).String()
-}
-func (e Event) DaddrString() string {
-	return common.AddrFrom16(uint16(e.Af), e.Daddr).String()
-}
-
-func (k Ipv4FlowKey) SaddrString() string {
-	return common.InetNtoa(k.Saddr)
-}
-func (k Ipv4FlowKey) DaddrString() string {
-	return common.InetNtoa(k.Daddr)
-}
-
-func (k Ipv6FlowKey) SaddrString() string {
-	return common.AddrFrom16(common.AF_INET6, k.Saddr).String()
-}
-func (k Ipv6FlowKey) DaddrString() string {
-	return common.AddrFrom16(common.AF_INET6, k.Daddr).String()
-}
-
 type Options struct {
 	bpfObjPath string
 	verbose    bool
@@ -172,7 +147,7 @@ func printCountIpv4(ipv4Count *bpf.BPFMap) {
 		if err := binary.Read(bytes.NewReader(ret[1]), binary.LittleEndian, &value); err != nil {
 			log.Fatalln(err)
 		}
-		fmt.Printf("%-25s %-25s", key.SaddrString(), key.DaddrString())
+		fmt.Printf("%-25s %-25s", common.InetNtoa(key.Saddr), common.InetNtoa(key.Daddr))
 		if opts.sourcePort {
 			fmt.Printf(" %-20d", key.Sport)
 		}
@@ -196,7 +171,8 @@ func printCountIpv6(ipv6Count *bpf.BPFMap) {
 		if err := binary.Read(bytes.NewReader(ret[1]), binary.LittleEndian, &value); err != nil {
 			log.Fatalln(err)
 		}
-		fmt.Printf("%-25s %-25s", key.SaddrString(), key.DaddrString())
+		fmt.Printf("%-25s %-25s", common.AddrFrom16(common.AF_INET6, key.Saddr).String(),
+			common.AddrFrom16(common.AF_INET6, key.Daddr).String())
 		if opts.sourcePort {
 			fmt.Printf(" %-20d", key.Sport)
 		}
@@ -249,7 +225,9 @@ func printEvent(data []byte) {
 		af = 6
 	}
 	fmt.Printf("%-6d %-12.12s %-2d %-16s %-16s",
-		e.Pid, e.TaskString(), af, e.SaddrString(), e.DaddrString())
+		e.Pid, common.GoString(e.Task[:]), af,
+		common.AddrFrom16(uint16(e.Af), e.Saddr).String(),
+		common.AddrFrom16(uint16(e.Af), e.Daddr).String())
 	if opts.sourcePort {
 		fmt.Printf(" %-5d", e.Sport)
 	}

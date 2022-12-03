@@ -12,6 +12,7 @@ import (
 	"time"
 
 	bpf "github.com/aquasecurity/libbpfgo"
+	"github.com/mozillazg/libbpfgo-tools/common"
 	flag "github.com/spf13/pflag"
 )
 
@@ -19,14 +20,6 @@ type Event struct {
 	Pid  uint32
 	Comm [16]byte
 	Disk [32]byte
-}
-
-func (e Event) CommString() string {
-	return string(bytes.TrimRight(e.Comm[:], "\x00"))
-}
-
-func (e Event) DiskString() string {
-	return string(bytes.TrimRight(e.Disk[:], "\x00"))
 }
 
 type Options struct {
@@ -71,7 +64,7 @@ func printEvent(data []byte) {
 
 	ts := time.Now().Format("15:04:05")
 	fmt.Printf("%-8s %-7d %-16s %-s\n",
-		ts, e.Pid, e.CommString(), e.DiskString())
+		ts, e.Pid, common.GoString(e.Comm[:]), common.GoString(e.Disk[:]))
 }
 
 func main() {

@@ -6,7 +6,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"log"
-	"net/netip"
 	"os"
 	"os/signal"
 	"syscall"
@@ -14,18 +13,14 @@ import (
 	"unsafe"
 
 	bpf "github.com/aquasecurity/libbpfgo"
+	"github.com/mozillazg/libbpfgo-tools/common"
 	flag "github.com/spf13/pflag"
 )
 
-const (
-	IPProtoTCP uint16 = 6
-	IPProtoUDP uint16 = 17
-)
-
-type uint128 [16]byte
+const TASK_COMM_LEN = 16
 
 type BindEvent struct {
-	Addr       uint128
+	Addr       common.Uint128
 	TsUs       uint64
 	Pid        uint32
 	BoundDevIf uint32
@@ -34,11 +29,7 @@ type BindEvent struct {
 	Proto      uint16
 	Opts       uint8
 	Ver        uint8
-	Task       [16]byte
-}
-
-func (e BindEvent) TaskString() string {
-	return string(bytes.TrimRight(e.Task[:], "\x00"))
+	Task       [TASK_COMM_LEN]byte
 }
 
 type Options struct {
@@ -86,22 +77,10 @@ func initGlobalVariable(bpfModule *bpf.Module, name string, value interface{}) {
 	}
 }
 
-func getCgroupDirFD(cgroupV2DirPath string) (int, error) {
-	const (
-		O_DIRECTORY int = 0200000
-		O_RDONLY    int = 00
-	)
-	fd, err := syscall.Open(cgroupV2DirPath, O_DIRECTORY|O_RDONLY, 0)
-	if fd < 0 {
-		return 0, fmt.Errorf("failed to open cgroupv2 directory path %s: %w", cgroupV2DirPath, err)
-	}
-	return fd, nil
-}
-
 func initFilters(bpfModule *bpf.Module) {
 	if opts.cgroup != "" {
 		idx := 0
-		cgroupFd, err := getCgroupDirFD(opts.cgroup)
+		cgroupFd, err := common.GetCgroupDirFD(opts.cgroup)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -135,10 +114,10 @@ func formatEvent(event BindEvent) {
 		fmt.Printf("%8s ", time.Now().Format("15:04:05"))
 	}
 	switch event.Proto {
-	case IPProtoTCP:
+	case common.IPPROTO_TCP:
 		proto = "TCP"
 		break
-	case IPProtoUDP:
+	case common.IPPROTO_UDP:
 		proto = "UDP"
 	default:
 		proto = "UNK"
@@ -150,16 +129,12 @@ func formatEvent(event BindEvent) {
 	}
 	switch event.Ver {
 	case 4:
-		v := [4]byte{}
-		for i := 0; i < 4; i++ {
-			v[i] = event.Addr[i]
-		}
-		addr = netip.AddrFrom4(v).String()
+		addr = common.AddrFrom16(common.AF_INET, event.Addr).String()
 	default:
-		addr = netip.AddrFrom16(event.Addr).String()
+		addr = common.AddrFrom16(common.AF_INET6, event.Addr).String()
 	}
 	fmt.Printf("%-7d %-16s %-3d %-5s %-5s %-4d %-5d %-48s\n",
-		event.Pid, event.TaskString(), event.Ret, proto, bindOpts, event.BoundDevIf, event.Port, addr)
+		event.Pid, common.GoString(event.Task[:]), event.Ret, proto, bindOpts, event.BoundDevIf, event.Port, addr)
 }
 
 func main() {

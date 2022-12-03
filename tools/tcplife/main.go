@@ -39,17 +39,6 @@ type Event struct {
 	Comm   [16]byte
 }
 
-func (e Event) CommString() string {
-	return string(bytes.TrimRight(e.Comm[:], "\x00"))
-}
-
-func (e Event) SaddrString() string {
-	return common.AddrFrom16(e.Family, e.Saddr).String()
-}
-func (e Event) DaddrString() string {
-	return common.AddrFrom16(e.Family, e.Daddr).String()
-}
-
 type Options struct {
 	bpfObjPath string
 	verbose    bool
@@ -158,7 +147,8 @@ func printEvent(data []byte) {
 		fmt.Printf("%8s ", ts)
 	}
 	fmt.Printf("%-7d %-16s %-*s %-5d %-*s %-5d %-6.2f %-6.2f %-.2f\n",
-		e.Pid, e.CommString(), columnWidth, e.SaddrString(), e.Sport, columnWidth, e.DaddrString(), e.Dport,
+		e.Pid, common.GoString(e.Comm[:]), columnWidth, common.AddrFrom16(e.Family, e.Saddr).String(),
+		e.Sport, columnWidth, common.AddrFrom16(e.Family, e.Daddr).String(), e.Dport,
 		float64(e.TxB)/1024, float64(e.RxB)/1024, float64(e.SpanUs)/1000)
 }
 
