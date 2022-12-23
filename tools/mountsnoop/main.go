@@ -228,8 +228,7 @@ func main() {
 	attachPrograms(bpfModule)
 
 	eventsChannel := make(chan []byte)
-	lostChannel := make(chan uint64)
-	pb, err := bpfModule.InitPerfBuf("events", eventsChannel, lostChannel, PERF_BUFFER_PAGES)
+	pb, err := bpfModule.InitRingBuf("events", eventsChannel)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -254,8 +253,6 @@ loop:
 		select {
 		case data := <-eventsChannel:
 			printEvent(data)
-		case e := <-lostChannel:
-			log.Printf("lost %d events", e)
 		case <-ctx.Done():
 			break loop
 		}
