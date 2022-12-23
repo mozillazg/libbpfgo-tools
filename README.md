@@ -5,7 +5,7 @@
 [libbpfgo](https://github.com/aquasecurity/libbpfgo) port of [bcc/libbpf-tools](https://github.com/iovisor/bcc/tree/master/libbpf-tools).
 
 
-## tools (30/46)
+## tools (30/52)
 
 * [x] [bashreadline](./tools/bashreadline)
 * [x] [bindsnoop](./tools/bindsnoop)
@@ -13,8 +13,10 @@
 * [x] [biopattern](./tools/biopattern)
 * [x] [biosnoop](./tools/biosnoop)
 * [x] [biostacks](./tools/biostacks)
+* [ ] biotop
 * [x] [bitesize](./tools/bitesize)
 * [ ] cachestat
+* [ ] capable
 * [x] [cpudist](./tools/cpudist)
 * [ ] cpufreq
 * [x] [drsnoop](./tools/drsnoop)
@@ -27,6 +29,7 @@
 * [ ] funclatency
 * [ ] gethostlatency
 * [ ] hardirqs
+* [ ] javagc
 * [ ] klockstat
 * [ ] ksnoop
 * [ ] llcstat
@@ -50,6 +53,9 @@
 * [x] [tcpconnlat](./tools/tcpconnlat)
 * [x] [tcplife](./tools/tcplife)
 * [x] [tcprtt](./tools/tcprtt)
+* [ ] tcpstates
 * [x] [tcpsynbl](./tools/tcpsynbl)
+* [ ] tcptop
 * [x] [tcptracer](./tools/tcptracer)
 * [ ] vfsstat
+* [ ] wakeuptime

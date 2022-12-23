@@ -32,19 +32,18 @@ $(TOOL_NAME).bpf.o: $(LIBBPF_SRC) $(BPFTOOL_SRC) $(TOOL_BPF_OBJ)
 
 .PHONY: $(LIBBPF_SRC)
 $(LIBBPF_SRC):
-	@if [ ! -d $(LIBBPF_SRC) ]; then
-		cd $(BCC_SRC)
-		$(GIT) submodule update --init --recursive
-	fi
+	cd $(BCC_SRC)
+	$(GIT) submodule update --init --recursive
 
 .PHONY: $(BPFTOOL_SRC)
 $(BPFTOOL_SRC):
-	@if [ ! -d $(BPFTOOL_SRC) ]; then
-		cd $(BCC_SRC)
-		$(GIT) submodule update --init --recursive
-	fi
+	cd $(BCC_SRC)
+	$(GIT) submodule update --init --recursive
 
 .PHONY: $(TOOL_BPF_OBJ)
 $(TOOL_BPF_OBJ):
 	cd $(LIBBPF_TOOLS_SRC)
+	@if ! test -d /usr/include/asm; then
+		sudo ln -s /usr/include/asm-generic /usr/include/asm
+	fi
 	$(MAKE)
