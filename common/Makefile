@@ -43,4 +43,7 @@ $(BPFTOOL_SRC):
 .PHONY: $(TOOL_BPF_OBJ)
 $(TOOL_BPF_OBJ):
 	cd $(LIBBPF_TOOLS_SRC)
+	@if ! test -d /usr/include/asm; then
+		sudo ln -s /usr/include/asm-generic /usr/include/asm
+	fi
 	$(MAKE)
