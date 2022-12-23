@@ -79,8 +79,7 @@ func main() {
 	}
 
 	eventsChannel := make(chan []byte)
-	lostChannel := make(chan uint64)
-	pb, err := bpfModule.InitPerfBuf("events", eventsChannel, lostChannel, 1)
+	pb, err := bpfModule.InitRingBuf("events", eventsChannel)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -103,8 +102,6 @@ loop:
 				log.Fatalf("read data failed: %s\n%v", err, data)
 			}
 			formatEvent(event)
-		case e := <-lostChannel:
-			log.Printf("lost %d events", e)
 		case <-ctx.Done():
 			break loop
 		}
