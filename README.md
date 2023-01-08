@@ -58,4 +58,4 @@
 * [ ] tcptop
 * [x] [tcptracer](./tools/tcptracer)
 * [ ] vfsstat
-* [ ] wakeuptime
+* [x] [wakeuptime](./tools/wakeuptime)

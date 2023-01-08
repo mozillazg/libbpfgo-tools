@@ -20,8 +20,10 @@
 /tools/biopattern/biopattern
 /tools/biosnoop/biosnoop
 /tools/biostacks/biostacks
+/tools/biotop/biotop
 /tools/bitesize/bitesize
 /tools/cachestat/cachestat
+/tools/capable/capable
 /tools/cpudist/cpudist
 /tools/cpufreq/cpufreq
 /tools/drsnoop/drsnoop
@@ -34,6 +36,7 @@
 /tools/funclatency/funclatency
 /tools/gethostlatency/gethostlatency
 /tools/hardirqs/hardirqs
+/tools/javagc/javagc
 /tools/klockstat/klockstat
 /tools/ksnoop/ksnoop
 /tools/llcstat/llcstat
@@ -57,6 +60,9 @@
 /tools/tcpconnlat/tcpconnlat
 /tools/tcplife/tcplife
 /tools/tcprtt/tcprtt
+/tools/tcpstates/tcpstates
 /tools/tcpsynbl/tcpsynbl
+/tools/tcptop/tcptop
 /tools/tcptracer/tcptracer
 /tools/vfsstat/vfsstat
+/tools/wakeuptime/wakeuptime
