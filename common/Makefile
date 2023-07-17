@@ -17,7 +17,7 @@ TOOL_NAME = $(shell basename $(abspath ./))
 TOOL_BPF_OBJ = $(abspath $(LIBBPF_TOOLS_OUTPUT)/$(TOOL_NAME).bpf.o)
 
 CGO_CFLAGS_STATIC = "-I$(abspath $(LIBBPF_TOOLS_OUTPUT))"
-CGO_LDFLAGS_STATIC = "-lelf -lz $(LIBBPF_OBJ)"
+CGO_LDFLAGS_STATIC = "-lelf -lz -lzstd $(LIBBPF_OBJ)"
 CGO_EXTLDFLAGS_STATIC = '-w -extldflags "-static"'
 
 .PHONY: $(TOOL_NAME)
