@@ -21,7 +21,7 @@ CGO_LDFLAGS_STATIC = "-lelf -lz -lzstd $(LIBBPF_OBJ)"
 CGO_EXTLDFLAGS_STATIC = '-w -extldflags "-static"'
 
 .PHONY: $(TOOL_NAME)
-$(TOOL_NAME): $(TOOL_NAME).bpf.o
+$(TOOL_NAME): $(TOOL_NAME).bpf.o install_uapi_headers
 	CC=$(CLANG) CGO_CFLAGS=$(CGO_CFLAGS_STATIC) \
 	CGO_LDFLAGS=$(CGO_LDFLAGS_STATIC) \
 	go build -tags netgo -ldflags $(CGO_EXTLDFLAGS_STATIC)
@@ -47,3 +47,7 @@ $(TOOL_BPF_OBJ):
 		sudo ln -s /usr/include/asm-generic /usr/include/asm
 	fi
 	$(MAKE)
+
+.PHONY: install_uapi_headers
+install_uapi_headers:
+	$(MAKE) -C $(LIBBPF_SRC)/src UAPIDIR=$(LIBBPF_TOOLS_OUTPUT) install_uapi_headers
