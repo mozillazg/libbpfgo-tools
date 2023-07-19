@@ -11,9 +11,9 @@
 * [x] [bindsnoop](./tools/bindsnoop)
 * [x] [biolatency](./tools/biolatency)
 * [x] [biopattern](./tools/biopattern)
-* [x] [biosnoop](./tools/biosnoop)
+* [x] [biosnoop](./tools/biosnoop), This command can not working on kernel which the version is greater than 5.17, see [iovisor/bcc#4261](https://github.com/iovisor/bcc/issues/4261) for details.
 * [x] [biostacks](./tools/biostacks)
-* [ ] biotop
+* ~~[ ] biotop~~ This command would not be implemented, see [iovisor/bcc#4261](https://github.com/iovisor/bcc/issues/4261) for details.
 * [x] [bitesize](./tools/bitesize)
 * [ ] cachestat
 * [ ] capable
